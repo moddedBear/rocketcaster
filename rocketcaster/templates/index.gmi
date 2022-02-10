@@ -1,0 +1,9 @@
+# RocketCaster
+
+A gemini podcast index.
+
+RocketCaster provides podcast information, links, and episode lists and makes it possible to subscribe to podcasts through gemini using any browser that supports gemini page subsciptions.
+
+=> /search Search for a podcast
+
+=> /about About

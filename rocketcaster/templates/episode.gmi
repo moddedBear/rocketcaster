@@ -1,0 +1,19 @@
+# {{ feed_title }}
+{% if author %}
+By {{ author }}
+{% endif %}
+
+## {{ episode_title }}
+{% if season and episode_num %}
+### S{{ season }} E{{ episode_num }}
+{% endif %}
+
+=> {{ episode_url }} Play episode ({{ duration | readable_duration }})
+
+Published {{ published }}
+
+{% if description %}
+{{ description }}
+{% endif %}
+
+=> /podcast/{{ feed_id }} Return to podcast

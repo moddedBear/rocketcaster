@@ -1,0 +1,5 @@
+# About RocketCaster
+
+RocketCaster is powered by podcastindex.org. Huge thanks to the folks there for the work they do.
+
+=> https://podcastindex.org/

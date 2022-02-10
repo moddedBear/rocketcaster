@@ -1,0 +1,27 @@
+# {{ title }}
+{% if author %}
+By {{ author }}
+{% endif %}
+
+{% if description %}
+{{ description }}
+{% endif %}
+{% if categories %}
+
+### Categories
+{% for category in categories %}
+* {{ category }}
+{% endfor %}
+{% endif %}
+
+### Feed
+=> {{ feed }}
+
+### Link
+=> {{ link }}
+
+## Episodes
+
+{% for episode in episodes %}
+=> /episode/{{ episode.id }} {{ episode.datePublished | timestamp_to_date }} {{ episode.title }}
+{% endfor %}

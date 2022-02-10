@@ -1,0 +1,11 @@
+# Search
+
+Showing {{ count }} podcast results for "{{ search_term }}"
+=> /search Perform another search
+{% for result in results %}
+
+=> /podcast/{{ result.id }} {{ result.title }} by {{ result.author }}
+{% if result.description %}
+{{ result.description }}
+{% endif %}
+{% endfor %}
