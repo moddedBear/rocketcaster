@@ -3,3 +3,5 @@
 RocketCaster is powered by podcastindex.org. Huge thanks to the folks there for the work they do.
 
 => https://podcastindex.org/
+
+=> https://github.com/moddedBear/rocketcaster RocketCaster source code on GitHub
