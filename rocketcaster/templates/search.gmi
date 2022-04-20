@@ -2,6 +2,8 @@
 
 Showing {{ count }} podcast results for "{{ search_term }}"
 => /search Perform another search
+
+## Results
 {% for result in results %}
 
 => /podcast/{{ result.id }} {{ result.title }} by {{ result.author }}

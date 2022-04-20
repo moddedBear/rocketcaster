@@ -121,3 +121,11 @@ def search_view(request):
 def about_view(request):
     body = render_template('about.gmi')
     return Response(Status.SUCCESS, 'text/gemini', body)
+
+
+@app.route('/robots.txt')
+def robots_view(request):
+    body = render_template('robots.txt')
+    # TODO: definitely need to implement a better way to serve static files like this one
+    # but I can't be bothered right now
+    return Response(Status.SUCCESS, 'text/plain', body)

@@ -1,0 +1,5 @@
+# Podcastindex.org, whose API this capsule relies on, asks for users of their API to refrain from crawling
+User-agent: *
+Disallow: /podcast/
+Disallow: /episode/
+Disallow: /search

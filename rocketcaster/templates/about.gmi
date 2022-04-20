@@ -1,7 +1,10 @@
 # About RocketCaster
 
+RocketCaster provides information and links for podcasts and individual episodes in a format that makes it possible to subscribe to podcasts through gemini using any browser or feed aggregator that supports gemini page subsciptions.
+
 RocketCaster is powered by podcastindex.org. Huge thanks to the folks there for the work they do.
 
 => https://podcastindex.org/
 
 => https://github.com/moddedBear/rocketcaster RocketCaster source code on GitHub
+=> gemini://moddedbear.xyz/logs/2022-02-09-introducing-rocketcaster.gmi RocketCaster announcement post

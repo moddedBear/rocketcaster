@@ -25,3 +25,5 @@ By {{ author }}
 {% for episode in episodes %}
 => /episode/{{ episode.id }} {{ episode.datePublished | timestamp_to_date }} {{ episode.title }}
 {% endfor %}
+
+Add this page to your gemini subscriptions for podcast updates.
