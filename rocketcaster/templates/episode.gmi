@@ -8,7 +8,12 @@ By {{ author }}
 ### S{{ season }} E{{ episode_num }}
 {% endif %}
 
-=> {{ episode_url }} Play episode ({{ duration | readable_duration }})
+=> {{episode_url}} Play episode ({{ duration | readable_duration }})
+{% if recent_post %}
+=> /post/{{recent_post.id}} 💬 Discussion started by {{ recent_post.author.name }} {{ (now - recent_post.created) | readable_timedelta }} ago
+{% else %}
+=> /share/{{episode_id}} 💬 Start episode discussion
+{% endif %}
 
 Published {{ published }}
 
@@ -16,4 +21,4 @@ Published {{ published }}
 {{ description }}
 {% endif %}
 
-=> /podcast/{{ feed_id }} Return to podcast
+=> /podcast/{{feed_id}} Return to podcast

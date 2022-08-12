@@ -1,0 +1,5 @@
+# Episode Discussion Archive
+
+{% for post in posts %}
+=> /post/{{post.id}} [{{ post.podcast_title }}] {{ post.episode_title }} • Shared by {{ post.author.name }}
+{% endfor %}

@@ -1,7 +1,7 @@
 # Search
 
 Showing {{ count }} podcast results for "{{ search_term }}"
-=> /search Perform another search
+=> /search 🔍 Perform another search
 
 ## Results
 {% for result in results %}

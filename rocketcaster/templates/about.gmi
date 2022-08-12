@@ -1,10 +1,38 @@
 # About RocketCaster
 
-RocketCaster provides information and links for podcasts and individual episodes in a format that makes it possible to subscribe to podcasts through gemini using any browser or feed aggregator that supports gemini page subsciptions.
-
-RocketCaster is powered by podcastindex.org. Huge thanks to the folks there for the work they do.
+RocketCaster is powered by podcastindex.org. Huge thanks to the folks there for the use of their API.
 
 => https://podcastindex.org/
 
+## Subscribing to podcasts
+
+RocketCaster podcast pages follow the gemsub spec, so you can get updates for a podcast by adding the page to your browser's or feed aggregator's subscriptions. See the help for your browser or feed aggregator for more information. You don't have to be registered on RocketCaster to subscribe to podcasts.
+
+## Registration
+
+To participate in discussions you must create a client certificate and assign it to rocketcaster.xyz. The instructions for doing this vary browser by browser.
+
+Remember not to set too short of an expiration date for your certificate!
+
+Once you have a client certificate attached visit the register link on the home page to choose a username. You'll be logged in whenever you visit using your certificate.
+
+## Starting a discussion
+
+You can start a discussion from any episode page. Note that you'll be unable to do so if there's already a discussion for that episode on the front page.
+
+Once a discussion is started it'll appear at the top of the front page for others to see and comment on.
+
+Gemtext formatting is allowed in discussions, with the exception of headers. 
+
+## User mentions
+
+You can tag other users in your discussion by using the @username syntax. Tagged users will be notified when they next visit RocketCaster.
+
+You can also tag all other users who have participated in the discussion by using @all.
+
+## Contact
+
+RocketCaster is created and maintained by moddedBear. To get help, report issues, or suggest new features you can contact me at the following email address or by opening an issue on GitHub.
+
+=> mailto:modbear@proton.me modbear@proton.me
 => https://github.com/moddedBear/rocketcaster RocketCaster source code on GitHub
-=> gemini://moddedbear.xyz/logs/2022-02-09-introducing-rocketcaster.gmi RocketCaster announcement post
