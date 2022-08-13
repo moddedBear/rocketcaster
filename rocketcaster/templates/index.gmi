@@ -6,7 +6,7 @@ A place to find, subscribe to, and discuss podcasts on gemini.
 
 => /about ℹ️ About and help
 
-## Episode Discussions
+## Shared Episodes
 
 {% if user %}
 ### Welcome back, {{ user.name }}
@@ -29,4 +29,4 @@ A place to find, subscribe to, and discuss podcasts on gemini.
 {% endif %}
 {% endfor %}
 
-=> /archive 📂 Discussion archive
+=> /archive 📂 Archive

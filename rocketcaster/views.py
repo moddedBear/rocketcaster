@@ -5,7 +5,7 @@ import re
 import jinja2
 from jetforce import JetforceApplication, Request, Response, Status
 from jetforce.app.base import EnvironDict, RoutePattern, RouteHandler
-from .models import User, Certificate, Post, Comment, Notification, Pref
+from .models import User, Certificate, Post, Comment, Notification
 import podcastindex
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
@@ -74,7 +74,7 @@ def strip_formatting_main(text):
 
 
 def strip_formatting_post(text):
-    regex = r"(^(#+))"
+    regex = r"(^(#+)|(```))"
     return re.sub(regex, '', text, flags=re.MULTILINE)
 
 
@@ -91,7 +91,7 @@ def parse_mentions(post=None, comment=None):
         usernames = re.findall(regex, post.content)
         for username in usernames:
             try:
-                user = User.select().where(User.name ** username)
+                user = User.select().where(User.name ** username).get()
             except:
                 user = None
             if user is not None:
@@ -105,7 +105,10 @@ def parse_mentions(post=None, comment=None):
         usernames = re.findall(regex, comment.content)
         for username in usernames:
             if str.lower(username) == 'all':
-                users = User.get_involved_users(comment.post.id)
+                try:
+                    users = User.get_involved_users(comment.post.id)
+                except:
+                    users = []
                 for user in users:
                     if user == comment.post.author or user == comment.author:
                         continue
@@ -124,10 +127,9 @@ def parse_mentions(post=None, comment=None):
                     )
             else:
                 try:
-                    user = User.select().where(User.name ** username)
+                    user = User.select().where(User.name ** username).get()
                 except:
                     user = None
-                print(user)
                 if user is not None:
                     Notification.create(
                         user=user,
@@ -361,10 +363,11 @@ def share_view(request, episode_id: str):
 
 @app.optional_auth_route('/post/(?P<post_id>[0-9]+)')
 def post_view(request, post_id: str):
-    post = Post.get(Post.id == post_id)
+    try:
+        post = Post.get(Post.id == post_id)
+    except Post.DoesNotExist:
+        return Response(Status.NOT_FOUND, "Post not found")
     comments = post.comments.order_by(Comment.created.desc())
-    if not post:
-        return Response(Status.NOT_FOUND)
     body = render_template('post.gmi', user=request.user, post=post,
                            comments=comments, now=datetime.now())
     return Response(Status.SUCCESS, 'text/gemini', body)
@@ -377,9 +380,10 @@ def comment_view(request, post_id: str):
         return Response(Status.INPUT, f"Commenting as {username}")
     content = request.query
 
-    post = Post.get(Post.id == post_id)
-    if not post:
-        return Response(Status.NOT_FOUND)
+    try:
+        post = Post.get(Post.id == post_id)
+    except Post.DoesNotExist:
+        return Response(Status.NOT_FOUND, "Post not found")
     comment = Comment.create(
         author=request.user,
         post=post,
@@ -392,9 +396,10 @@ def comment_view(request, post_id: str):
 
 @app.auth_route('/post/(?P<post_id>[0-9]+)/delete')
 def post_delete_view(request, post_id: str):
-    post = Post.get(Post.id == post_id)
-    if not post:
-        return Response(Status.NOT_FOUND)
+    try:
+        post = Post.get(Post.id == post_id)
+    except Post.DoesNotExist:
+        return Response(Status.NOT_FOUND, "Post not found")
     author_certificate = Certificate.get(Certificate.user == post.author)
     if not author_certificate.fingerprint == request.environ['TLS_CLIENT_HASH_B64']:
         return Response(Status.CERTIFICATE_NOT_AUTHORISED, "You don't have permission to do that.")
@@ -402,7 +407,8 @@ def post_delete_view(request, post_id: str):
     if not request.query or str.lower(request.query) != 'yes':
         return Response(Status.INPUT, 'Are you sure you want to delete this post? Type "yes" to confirm.')
 
-    Notification.delete().where(Notification.post == post).execute()
+    Notification.delete().where((Notification.post == post) |
+                                (Notification.comment << post.comments)).execute()
     Comment.delete().where(Comment.post == post).execute()
     post.delete_instance(recursive=True)
     return Response(Status.REDIRECT_TEMPORARY, '/')
@@ -410,9 +416,10 @@ def post_delete_view(request, post_id: str):
 
 @app.auth_route('/comment/(?P<comment_id>[0-9]+)/delete')
 def comment_delete_view(request, comment_id: str):
-    comment = Comment.get(Comment.id == comment_id)
-    if not comment:
-        return Response(Status.NOT_FOUND)
+    try:
+        comment = Comment.get(Comment.id == comment_id)
+    except Comment.DoesNotExist:
+        return Response(Status.NOT_FOUND, "Comment not found")
     author_certificate = Certificate.get(Certificate.user == comment.author)
     if not author_certificate.fingerprint == request.environ['TLS_CLIENT_HASH_B64']:
         return Response(Status.CERTIFICATE_NOT_AUTHORISED, "You don't have permission to do that.")
@@ -421,7 +428,7 @@ def comment_delete_view(request, comment_id: str):
         return Response(Status.INPUT, 'Are you sure you want to delete this comment? Type "yes" to confirm.')
 
     post_id = comment.post.id
-    Notification.delete().where(Notification.post == comment.post).execute()
+    Notification.delete().where(Notification.comment == comment).execute()
     comment.delete_instance(recursive=True)
     return Response(Status.REDIRECT_TEMPORARY, f'/post/{post_id}')
 
@@ -431,7 +438,7 @@ def notifications_view(request):
     notifications = Notification.select().where(
         Notification.user == request.user)
     body = render_template('notifications.gmi',
-                           user=request.user, notifications=notifications)
+                           user=request.user, notifications=notifications, now=datetime.now())
     return Response(Status.SUCCESS, 'text/gemini', body)
 
 

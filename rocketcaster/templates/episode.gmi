@@ -10,9 +10,9 @@ By {{ author }}
 
 => {{episode_url}} Play episode ({{ duration | readable_duration }})
 {% if recent_post %}
-=> /post/{{recent_post.id}} 💬 Discussion started by {{ recent_post.author.name }} {{ (now - recent_post.created) | readable_timedelta }} ago
+=> /post/{{recent_post.id}} 💬 Go to discussion started by {{ recent_post.author.name }} {{ (now - recent_post.created) | readable_timedelta }} ago
 {% else %}
-=> /share/{{episode_id}} 💬 Start episode discussion
+=> /share/{{episode_id}} 💬 Share episode
 {% endif %}
 
 Published {{ published }}

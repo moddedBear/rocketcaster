@@ -8,6 +8,8 @@ RocketCaster is powered by podcastindex.org. Huge thanks to the folks there for 
 
 RocketCaster podcast pages follow the gemsub spec, so you can get updates for a podcast by adding the page to your browser's or feed aggregator's subscriptions. See the help for your browser or feed aggregator for more information. You don't have to be registered on RocketCaster to subscribe to podcasts.
 
+=> gemini://gemini.circumlunar.space/docs/companion/subscription.gmi Read more about gemini page subscriptions at Project Gemini.
+
 ## Registration
 
 To participate in discussions you must create a client certificate and assign it to rocketcaster.xyz. The instructions for doing this vary browser by browser.
@@ -16,17 +18,17 @@ Remember not to set too short of an expiration date for your certificate!
 
 Once you have a client certificate attached visit the register link on the home page to choose a username. You'll be logged in whenever you visit using your certificate.
 
-## Starting a discussion
+## Sharing an episode
 
-You can start a discussion from any episode page. Note that you'll be unable to do so if there's already a discussion for that episode on the front page.
+You can start a new discussion from the "share episode" link on any episode page. Note that you'll be unable to do so if there's already a discussion for that episode on the front page. In that case, you'll be able to start a new discussion after the existing one falls off the front page.
 
-Once a discussion is started it'll appear at the top of the front page for others to see and comment on.
+When you share an episode it'll appear at the top of the front page for others to see and comment on.
 
-Gemtext formatting is allowed in discussions, with the exception of headers. 
+Some gemtext formatting is allowed in discussions. Headers and preformatted blocks are not supported.
 
 ## User mentions
 
-You can tag other users in your discussion by using the @username syntax. Tagged users will be notified when they next visit RocketCaster.
+You can tag other users in a post or comment by using the @username syntax. Tagged users will be notified when they next visit RocketCaster.
 
 You can also tag all other users who have participated in the discussion by using @all.
 

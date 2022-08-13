@@ -4,7 +4,7 @@ from peewee import *
 
 def init_db(db_path):
     db = SqliteDatabase(db_path)
-    model_list = [User, Certificate, Post, Comment, Notification, Pref]
+    model_list = [User, Certificate, Post, Comment, Notification]
     db.bind(model_list)
     db.create_tables(model_list)
 
@@ -82,8 +82,3 @@ class Notification(Model):
 
     def clear(cls, user):
         Notification.delete().where(Notification.user == user).execute()
-
-
-class Pref(Model):
-    user = ForeignKeyField(User, backref='prefs')
-    comments_most_recent_first = BooleanField(default=True)
