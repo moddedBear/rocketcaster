@@ -1,7 +1,32 @@
 # RocketCaster
 
-A gemini podcast index. Search for and subcribe to podcasts over gemini.
+A place to find, subscribe to, and discuss podcasts on gemini.
 
-=> /search Search podcasts
+=> /search 🔍 Search podcasts
 
-=> /about About
+=> /about ℹ️ About and help
+
+## Shared Episodes
+
+{% if user %}
+### Welcome back, {{ user.name }}
+{% if user.notifications %}
+=> /notifications 🔔 You have {{ user.notifications.count() }} {%if user.notifications.count() == 1 %}notification{% else %}notifications{% endif %}
+
+{% endif %}
+{% else %}
+=> /register Register to participate
+{% endif %}
+{% for post in posts %}
+
+=> /episode/{{post.episode_id}} [{{ post.podcast_title }}] {{ post.episode_title }}
+{% if post.content %}
+{{ post.content | strip_formatting_main }}
+{% endif %}
+=> /post/{{post.id}} 💬 {{ post.author.name }} • {{ post.comments.count() }} {% if post.comments.count() == 1 %}comment{% else %}comments{% endif %} • {{ (now - post.created) | readable_timedelta }} ago 
+{% if user == post.author %}
+=> /post/{{post.id}}/delete 🗑️ Delete
+{% endif %}
+{% endfor %}
+
+=> /archive 📂 Archive

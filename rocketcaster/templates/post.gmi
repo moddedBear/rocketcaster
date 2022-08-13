@@ -1,0 +1,35 @@
+# Episode Discussion
+
+## [{{ post.podcast_title }}] {{ post.episode_title }}
+
+=> /episode/{{post.episode_id}} Go to episode
+=> /podcast/{{post.podcast_id}} Go to podcast
+
+### {{ post.author.name }}
+{{ post.content | strip_formatting_post }}
+{{ (now - post.created) | readable_timedelta }} ago
+
+=> /comment/{{post.id}} 💬 Comment
+{% if user == post.author %}
+=> /post/{{post.id}}/delete 🗑️ Delete
+{% endif %}
+
+{% if comments %}
+{% if comments.count() == 1 %}
+## 1 comment
+{% else %}
+## {{ comments.count() }} comments
+{% endif %}
+{% for comment in comments %}
+
+### {{ comment.author.name }}
+{{ comment.content | strip_formatting_post }}
+{{ (now - comment.created) | readable_timedelta }} ago
+{% if comment.author == user %}
+=> /comment/{{comment.id}}/delete 🗑️ Delete
+{% endif %}
+{% endfor %}
+{% else %}
+## No comments
+Why not kick things off?
+{% endif %}

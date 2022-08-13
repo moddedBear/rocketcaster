@@ -1,0 +1,14 @@
+# Notifications
+{% if notifications %}
+=> /notifications/clear Clear all
+
+{% for notification in notifications %}
+{% if notification.post %}
+=> /post/{{notification.post.id}} {{ notification.message }} • {{ (now - notification.created) | readable_timedelta }} ago
+{% elif notification.comment %}
+=> /post/{{notification.comment.post.id}} {{ notification.message }} • {{ (now - notification.created) | readable_timedelta }} ago
+{% endif %}
+{% endfor %}
+{% else %}
+No notifications
+{% endif %}
