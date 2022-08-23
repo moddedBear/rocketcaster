@@ -8,7 +8,8 @@ By {{ author }}
 ### S{{ season }} E{{ episode_num }}
 {% endif %}
 
-=> {{episode_url}} Play episode ({{ duration | readable_duration }})
+=> /episode/{{episode_id}}/play 🔊 Play episode ({{ duration | readable_duration }})
+=> {{episode_url}} Direct episode link
 {% if recent_post %}
 => /post/{{recent_post.id}} 💬 Go to discussion started by {{ recent_post.author.name }} {{ (now - recent_post.created) | readable_timedelta }} ago
 {% else %}
