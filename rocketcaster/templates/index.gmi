@@ -1,6 +1,6 @@
 # RocketCaster
 
-A place to find, subscribe to, and discuss podcasts on gemini.
+A place to listen to and discuss podcasts on gemini.
 
 => /search 🔍 Search podcasts
 
