@@ -36,8 +36,9 @@ class User(Model):
         return cert
 
     @classmethod
-    def get_involved_users(cls, post_id):
-        query = User.select(User).join(Comment).where(Comment.post == post_id)
+    def get_commenters(cls, post_id):
+        query = User.select(User).join(Comment).where(
+            Comment.post == post_id).distinct()
         return query
 
 

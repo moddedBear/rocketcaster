@@ -123,7 +123,7 @@ def parse_mentions(post=None, comment=None):
         for username in usernames:
             if str.lower(username) == 'all':
                 try:
-                    users = User.get_involved_users(comment.post.id)
+                    users = User.get_commenters(comment.post.id)
                 except:
                     users = []
                 for user in users:
@@ -131,13 +131,6 @@ def parse_mentions(post=None, comment=None):
                         continue
                     Notification.create(
                         user=user,
-                        comment=comment,
-                        message=f"{comment.author.name} mentioned you in a comment by tagging @all",
-                        created=datetime.now()
-                    )
-                if comment.post.author != comment.author:
-                    Notification.create(  # notify post author separately
-                        user=comment.post.author,
                         comment=comment,
                         message=f"{comment.author.name} mentioned you in a comment by tagging @all",
                         created=datetime.now()
@@ -433,6 +426,16 @@ def comment_view(request, post_id: str):
         content=content,
         created=datetime.now()
     )
+
+    # notify post author
+    if post.author != comment.author:
+        Notification.create(
+            user=post.author,
+            comment=comment,
+            message=f"{comment.author.name} commented on {post.episode_title}",
+            created=datetime.now()
+        )
+
     parse_mentions(comment=comment)
     return Response(Status.REDIRECT_TEMPORARY, f'/post/{post_id}')
 
