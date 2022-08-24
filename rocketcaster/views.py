@@ -83,11 +83,23 @@ def strip_formatting_post(text):
     return re.sub(regex, '', text, flags=re.MULTILINE)
 
 
+def strip_html(text):
+    p_regex = r"(?<!^)<p>"
+    br_regex = r"(?<!^)<br ?/?>"
+    strip_regex = r"</? ?[a-zA-Z0-9]* ?/?>"
+    text = re.sub(r"\n", '', text)
+    text = re.sub(p_regex, '\n\n', text)
+    text = re.sub(br_regex, '\n', text)
+    text = re.sub(strip_regex, '', text)
+    return text
+
+
 template_env.filters['readable_timedelta'] = readable_timedelta
 template_env.filters['readable_duration'] = readable_duration
 template_env.filters['timestamp_to_date'] = timestamp_to_date
 template_env.filters['strip_formatting_main'] = strip_formatting_main
 template_env.filters['strip_formatting_post'] = strip_formatting_post
+template_env.filters['strip_html'] = strip_html
 
 
 def parse_mentions(post=None, comment=None):

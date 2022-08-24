@@ -19,7 +19,7 @@ By {{ author }}
 Published {{ published }}
 
 {% if description %}
-{{ description }}
+{{ description | strip_html }}
 {% endif %}
 
 => /podcast/{{feed_id}} Return to podcast
