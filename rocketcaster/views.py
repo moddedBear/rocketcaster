@@ -2,9 +2,11 @@ import os
 from datetime import datetime
 import typing
 import re
+import requests
 import jinja2
-from jetforce import JetforceApplication, Request, Response, Status
+from jetforce import JetforceApplication, Request, Response, Status, RateLimiter
 from jetforce.app.base import EnvironDict, RoutePattern, RouteHandler
+from twisted.internet.threads import deferToThread
 from .models import User, Certificate, Post, Comment, Notification
 import podcastindex
 
@@ -22,6 +24,9 @@ pi_config = podcastindex.get_config_from_env()
 index = podcastindex.init(pi_config)
 
 RESERVED_NAMES = ['admin', 'all']
+MAX_FILE_SIZE = 1024 * 1024 * 200  # 200MB max file size for proxied episodes
+
+proxy_rate_limiter = RateLimiter('2/m')
 
 
 def readable_timedelta(value):
@@ -262,6 +267,32 @@ def episode_view(request, episode_id: str):
     body = render_template('episode.gmi', feed_title=feed['title'], author=feed['author'], episode_title=episode['title'], season=episode['season'], episode_num=episode['episode'],
                            episode_url=episode['enclosureUrl'], duration=episode['duration'], published=episode['datePublishedPretty'], description=episode['description'], feed_id=feed['id'], episode_id=episode_id, recent_post=recent_post, now=datetime.now())
     return Response(Status.SUCCESS, 'text/gemini', body)
+
+
+@app.route('/episode/(?P<episode_id>[0-9]+)/play')
+@proxy_rate_limiter.apply
+def episode_play_view(request, episode_id: str):
+
+    def download_episode(url):
+        def get_content(url):
+            return requests.get(url).content
+
+        yield deferToThread(get_content, url)
+
+    episode_result = index.episodeById(id=episode_id)
+    episode = episode_result['episode']
+    if not episode:
+        return Response(Status.NOT_FOUND)
+    episode_url = episode['enclosureUrl']
+
+    r = requests.head(episode_url, allow_redirects=True)
+    if r.status_code == 200:
+        # check file size
+        if int(r.headers['content-length']) > MAX_FILE_SIZE:
+            return Response(Status.PROXY_ERROR, 'Episode file size is too large')
+        return Response(Status.SUCCESS, r.headers['content-type'], download_episode(episode_url))
+    else:
+        return Response(Status.PROXY_ERROR, 'Error downloading episode')
 
 
 @app.route('/search')
